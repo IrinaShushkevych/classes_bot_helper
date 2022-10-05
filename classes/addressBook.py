@@ -3,26 +3,9 @@ from classes.record import Record
 
 
 class AddressBook(UserDict):
-    def read_phonebook(self, path='phonebook.txt'): 
-        with open(path) as f:
-            line = f.readlines()
-        for el in line:
-            element = (el.replace('\n','')).split(' ')
-            record = Record(*element)
-            self.data[record.name.value.capitalize()] = record
-    
-    def write_phoneook(self, path='phonebook.txt'):
-        with open(path, 'w') as f:
-            for record in self.data:
-                line = record
-                for phone in self.data[record]:
-                    line += ' ' + phone.value
-                f.write(line + '\n')
-
-    def show_phone(self, name, *args):
+    def show_phone(self, name):
         name = name.capitalize()
         try:
-            result = self.data[name]
             if self.data[name]:
                 lists = []
                 for phone in self.data[name].phones:
@@ -31,23 +14,21 @@ class AddressBook(UserDict):
         except KeyError:
             raise ValueError(f'Can not find record {name}')
         
-    def add_record(self, name, *args):
-        record = Record(name.capitalize(), *args)
+    def add_record(self, name, phone=None):
+        record = Record(name.capitalize(), phone)
         self.data.__setitem__(record.name.value, record)
 
-    def remove_record(self, name, *args):
+    def remove_record(self, name):
         name = name.capitalize()
         try:
             self.data.__delitem__(name)
-            return
         except KeyError:
             raise ValueError(f'Can not find record {name}')
 
-    def add_phone(self, name, *args):
+    def add_phone(self, name, phone):
         name = name.capitalize()
         try:
-            self.data[name].add(*args)
-            return
+            self.data[name].add(phone)
         except KeyError:
             raise ValueError(f'Can not find record {name}')
         
@@ -56,33 +37,29 @@ class AddressBook(UserDict):
         new_name = new_name.capitalize()
         try:
             record = self.data[name]
-            record = record.rename(new_name)
-            self.data.__delitem__(name)
-            self.data.__setitem__(record.name.value, record)
-            return
         except KeyError:
             raise ValueError(f'Can not find record {name}')
+        record = record.rename(new_name)
+        self.data.__delitem__(name)
+        self.data.__setitem__(record.name.value, record)
 
     def change_phone(self, name, phone_old, new_phone):
         name = name.capitalize()
         try:
-            for phone in self.data[name].phones:
-                if phone.value.lower() == phone_old.lower():
-                    phone.change(new_phone)
-                    return
+            self.data[name].change(phone_old, new_phone)
         except KeyError:
             raise ValueError(f'Can not find record {name}')
 
-    def remove_phone(self, name, *args):
+    def remove_phone(self, name, phone=None):
         name = name.capitalize()
-        try:
-            for phone in args:
+        if phone: 
+            try:
                 for rec_phone in self.data[name].phones:
                     if rec_phone.value.lower() == phone.lower():
                         self.data[name].phones.remove(rec_phone)
                         return
-        except KeyError:
-            raise ValueError(f'Can not find record {name}')
+            except KeyError:
+                raise ValueError(f'Can not find record {name}')
 
     def print_addressbook(self):
         counts = 0
