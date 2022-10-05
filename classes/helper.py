@@ -20,6 +20,7 @@ class Helper:
             'help': self.func_help
             }
         self.phonebook = AddressBook()
+        # self.phonebook.read_phonebook()
 
     def check_args(self, count_args=None, name=None, phone=None, *args):
         if count_args == 1:

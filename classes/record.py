@@ -23,3 +23,7 @@ class Record:
         for i in range(0, len(self.phones)):
             if self.phones[i].value == value:
                self.phones[i].change(new_value)
+
+    def rename(self, name):
+        self.name.change(name)
+        return self
