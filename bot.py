@@ -10,6 +10,9 @@ def handler_error(func):
         except IndexError :
             print('Command is wrong')
             return True
+        except KeyError as e:
+            print(e)
+            return True
         except Exception as e:
             print(e)
             return True

@@ -1,12 +1,12 @@
+import re
 from classes.field import Field
 
 class Phone(Field):
-    def __init__(self, value):
-        if self.check(value):
-            self.value = value
-    
-    def check(self, value):
-        return True
+    @Field.value.setter
+    def value(self, value=None):
+        if value:
+            result = re.match(r"^\d{3}\-\d{3}\-\d{2}\-\d{2}|\d{3}\-\d{3}\-\d{1}\-\d{3}$", value)
+            if not result:
+                raise ValueError('Invalid phone number.Must be 066-123-45-67 or 066-123-4-567')
+        self._value = value
 
-    def change(self, value):
-        self.value = value

@@ -1,3 +1,4 @@
+from itertools import count
 from classes.addressBook import AddressBook
 
 class Helper:
@@ -6,8 +7,10 @@ class Helper:
             'hello': self.func_hello, 
             'add': self.func_add, 
             'addphone': self.func_add_phone,
+            'addbirthday': self.func_add_birthday,
             'rename': self.func_changename, 
             'changephone': self.func_changephone, 
+            'changebirthday': self.func_change_birthday, 
             'remove': self.func_remove,
             'delete': self.func_remove,
             'deletephone': self.func_remove_phone,
@@ -17,17 +20,21 @@ class Helper:
             'exit': self.func_exit, 
             'close': self.func_exit, 
             'good buy': self.func_exit,
-            'help': self.func_help
+            'help': self.func_help,
+            'iter': self.func_print_iter
             }
         self.phonebook = AddressBook()
 
-    def check_args(self, count_args=None, name=None, phone=None, *args):
+    def check_args(self, count_args=None, name=None, phone=None, birthday=None, *args):
         if count_args == 1:
             if not name:
                 raise ValueError('Enter user name')
         elif count_args == 2:
             if not (name and phone):
                 raise ValueError('Give me name and phone please')
+        elif count_args == 3:
+            if not (name and birthday):
+                raise ValueError('Give me name and birthday please')
         return True
 
     def func_hello(self, ):
@@ -50,6 +57,12 @@ class Helper:
         print(f'Phone is add into record {name}')
         return True
 
+    def func_add_birthday(self,name, birthday, *args):
+        self.check_args(2, name, birthday, *args)
+        self.phonebook.add_birthday(name, birthday)
+        print(f'Birthday is add into record {name}')
+        return True
+
     def func_changename(self, name_old=None, name_new=None, *args):
         self.check_args(2, name_old, name_new, *args)
         self.phonebook.change_name(name_old, name_new)
@@ -60,6 +73,12 @@ class Helper:
         self.check_args(2, name, phone_old, phone_new, *args)
         self.phonebook.change_phone(name, phone_old, phone_new)
         print(f'Phone {phone_old} of record {name} is change')
+        return True
+
+    def func_change_birthday(self, name, birthday, *args):
+        self.check_args(3, name, None,  birthday, *args)
+        self.phonebook.change_birthday(name, birthday)
+        print(f'Birthday of record {name} is change')
         return True
 
     def func_remove(self, name=None, *args):
@@ -88,6 +107,7 @@ class Helper:
         print('hello')
         print('add <name> {<phone> {<phone> ...}}')
         print('addphone <name> <phone> {<phone>}')
+        print('addbirthday <name> <birthday>')        
         print('changephone <name> <phone old> <phone new>')
         print('rename <name old> <name new>')
         print('phone <name>')
@@ -97,5 +117,14 @@ class Helper:
         print('deletephone <name> <phone> {<phone>}')
         print('show all')
         print('good by || close || exit')
+        print('iter <count element in iteration>')
         return True
 
+    def func_print_iter(self, counts):
+        try:
+            self.phonebook.set_iter_count(int(counts))
+        except:
+            raise ValueError(f'{counts} is not integer')
+        for el in self.phonebook:
+            print(el)
+        return True
