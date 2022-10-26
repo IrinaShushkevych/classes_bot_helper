@@ -21,7 +21,8 @@ class Helper:
             'close': self.func_exit, 
             'good buy': self.func_exit,
             'help': self.func_help,
-            'iter': self.func_print_iter
+            'iter': self.func_print_iter,
+            'find': self.func_find
             }
         self.phonebook = AddressBook()
 
@@ -102,6 +103,11 @@ class Helper:
         self.phonebook.print_addressbook()
         return True
 
+    def func_find(self, key=''):
+        result = self.phonebook.find(key)
+        self.phonebook.print_addressbook(result)
+        return True
+
     def func_help(self):
         print('Commands:')
         print('hello')
@@ -118,6 +124,7 @@ class Helper:
         print('show all')
         print('good by || close || exit')
         print('iter <count element in iteration>')
+        print('find <key>')
         return True
 
     def func_print_iter(self, counts):
