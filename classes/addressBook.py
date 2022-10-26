@@ -41,13 +41,8 @@ class AddressBook(UserDict):
     def find(self, keys):
         result = {}
         for key, value in self.data.items():
-            if value.name.is_contain(keys):
+            if value.is_contain(keys):
                 result[key] = value
-            else:
-                for phone in value.phones:
-                    if phone.is_contain(keys):
-                        result[key] = value
-                        break
         return result
 
     def set_iter_count(self, counts=1):

@@ -54,6 +54,13 @@ class Record:
             birth = date(now.year + 1, self.birthday.value.month, self.birthday.value.day)
         return (birth - now).days
 
+    def is_contain(self, keys):
+        if self.name.is_contain(keys):
+                return True
+        for phone in self.phones:
+            if phone.is_contain(keys):
+                return True
+
     def __repr__(self):
         string = f'Record : ( {self.name.value} ['
         for el in self.phones:
